@@ -1,3 +1,5 @@
+import time
+
 def create_equations(equations):
     split = [e.split(": ") for e in equations]
     read = [[int(e[0]), [int(x) for x in e[1].split(" ")]] for e in split]
@@ -78,8 +80,11 @@ if __name__ == "__main__":
     with open("inputs/day_7.txt") as f:
         input = [l.strip() for l in f.readlines()]
         equations = create_equations(input)
+        start = time.time()
         t = sum_valid(equations)
-        print(t, "< part 1")
+        print(t, "< part 1, completed in ", str(time.time() - start)[:7], " seconds")
         equations = create_equations(input)
+        start = time.time()
         t_2 = sum_valid_2(equations)
-        print(t_2, "< part 2")
+        # print(t_2, "< part 2")
+        print(t_2, "< part 2, completed in ", str(time.time() - start)[:7], " seconds")
