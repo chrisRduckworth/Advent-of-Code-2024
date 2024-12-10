@@ -1,3 +1,5 @@
+import time
+
 def create_map(input):
     # turns the array of strings into a grid with padded edges
     grid = [["X", *[int(c) for c in l], "X"] for l in input]
@@ -101,8 +103,10 @@ if __name__ == "__main__":
     with open("inputs/day_10.txt") as f:
         input = [l.rstrip() for l in f.readlines()]
         grid = create_map(input)
+        start = time.time()
         score = part_1(grid)
-        print(score, "< part 1")
+        print(score, "< part 1 in ", str(1000*(time.time() - start))[:5], " ms")
+        start = time.time()
         score2 = part_2(grid)
-        print(score2, "< part 2")
+        print(score2, "< part 2 in ", str(1000*(time.time() - start))[:5], " ms")
 
