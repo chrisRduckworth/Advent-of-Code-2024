@@ -16,3 +16,6 @@ Solutions Written in python. I have less free time this year, but I'm still givi
 | 8   | ⭐⭐ |
 | 9   | ⭐⭐ |
 | 10   | ⭐⭐ |
+| 11   | ⭐⭐ |
+| 12   | ⭐⭐ |
+| 13   | ⭐⭐ |
