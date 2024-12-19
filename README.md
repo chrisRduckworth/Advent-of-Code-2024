@@ -23,3 +23,5 @@ Solutions Written in python. I have less free time this year, but I'm still givi
 | 15   | ⭐⭐ |
 | 16   | ⭐⭐ |
 | 17   | ⭐⭐ |
+| 18   | ⭐⭐ |
+| 19   | ⭐⭐ |
