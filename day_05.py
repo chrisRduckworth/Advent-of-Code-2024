@@ -50,7 +50,7 @@ if __name__ == "__main__":
         [instructions, updates] = f.read().split("\n\n")
         instructions = [[int(x) for x in i.split("|")]
                         for i in instructions.split("\n")]
-        updates = [[int(x) for x in u.split(",")] for u in updates.split("\n")]
+        updates = [[int(x) for x in u.split(",")] for u in updates[:-1].split("\n")]
         total = sum_middle(instructions, updates)
         print(total, "< part 1")
         total_2 = fix_incorrect(instructions, updates)
