@@ -21,7 +21,7 @@ def part2(memory):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_3.txt") as f:
+    with open("inputs/day_03.txt") as f:
         mem = f.read()
         total = multiply(mem)
         print(total, "< total")

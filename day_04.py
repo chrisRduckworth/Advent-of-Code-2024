@@ -50,7 +50,7 @@ def count_x_mas(wordsearch):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_4.txt") as f:
+    with open("inputs/day_04.txt") as f:
         ws = [s.strip() for s in f.readlines()]
         count = count_xmas(ws)
         print(count, "< xmas count")

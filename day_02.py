@@ -32,7 +32,7 @@ def count_safe(r):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_2.txt") as f:
+    with open("inputs/day_02.txt") as f:
         reports = f.readlines()
         safe = count_safe(reports)
         print(safe, "< safe")

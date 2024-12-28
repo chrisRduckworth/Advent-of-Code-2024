@@ -77,7 +77,7 @@ def defrag_map(map):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_9.txt") as f:
+    with open("inputs/day_09.txt") as f:
         map = f.read()
         compacted = compact_map(map)
         csum = calc_checksum(compacted)

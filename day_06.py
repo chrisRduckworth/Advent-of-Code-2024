@@ -82,13 +82,13 @@ def count_loops(map):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_6.txt") as f:
+    with open("inputs/day_06.txt") as f:
         map = [l.strip() for l in f.readlines()]
         steps = count_pos(map)
         print(steps, "< steps")
     
     # need to reread the file because part 1 wasn't pure (oops)
-    with open("inputs/day_6.txt") as f:
+    with open("inputs/day_06.txt") as f:
         map = [l.strip() for l in f.readlines()]
         obs = count_loops(map)
         print(obs, "< obs")

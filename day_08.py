@@ -56,7 +56,7 @@ def count_antinodes_2(antenna):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_8.txt") as f:
+    with open("inputs/day_08.txt") as f:
         input = [l[:-1] for l in f.readlines()]
         total = count_antinodes(input)
         print(total, "< number of antinodes")

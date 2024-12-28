@@ -77,7 +77,7 @@ def sum_valid_2(equations):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_7.txt") as f:
+    with open("inputs/day_07.txt") as f:
         input = [l.strip() for l in f.readlines()]
         equations = create_equations(input)
         start = time.time()

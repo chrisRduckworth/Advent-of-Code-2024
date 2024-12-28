@@ -46,7 +46,7 @@ def fix_incorrect(instructions, updates):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_5.txt") as f:
+    with open("inputs/day_05.txt") as f:
         [instructions, updates] = f.read().split("\n\n")
         instructions = [[int(x) for x in i.split("|")]
                         for i in instructions.split("\n")]

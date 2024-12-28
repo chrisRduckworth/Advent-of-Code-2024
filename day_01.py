@@ -29,7 +29,7 @@ def sim_score(ids):
 
 
 if __name__ == "__main__":
-    with open("inputs/day_1.txt") as f:
+    with open("inputs/day_01.txt") as f:
         ids = f.readlines()
         dist = find_distance(ids)
         print(dist, "< dist")
