@@ -75,9 +75,10 @@ def calc_total_tokens(machines):
 
 if __name__ == "__main__":
     with open("inputs/day_13.txt") as f:
-        machines = create_inputs(f.read())
+        input = f.read()
+        machines = create_inputs(input)
         total = calc_total_tokens(machines)
         print(total, "< total tokens")
-        machines_2 = create_inputs_2(f.read())
-        total_2 = calc_total_tokens(machines)
+        machines_2 = create_inputs_2(input)
+        total_2 = calc_total_tokens(machines_2)
         print(total_2, "< part 2")
