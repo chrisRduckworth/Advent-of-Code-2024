@@ -4,6 +4,7 @@ from itertools import chain
 def compact_map(map):
     map_arr = []
     for i, d in enumerate(map):
+        if d == "\n": continue
         if i % 2 == 0:
             # it's a file
             # input contains no 0s at even positions (convenient)
@@ -45,6 +46,7 @@ def defrag_map(map):
 
     map_arr = []
     for i, d in enumerate(map):
+        if d == "\n": continue
         if i % 2 == 0:
             map_arr.append([i // 2] * int(d))
         else:
