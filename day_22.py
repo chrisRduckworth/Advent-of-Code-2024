@@ -1,6 +1,9 @@
+from collections import defaultdict
+
+
 def calc_secret(init, count):
     secret = init
-    for i in range(count):
+    for _ in range(count):
         m = secret << 6
         secret = (m ^ secret) % 16777216
         d = secret >> 5
@@ -13,66 +16,45 @@ def calc_secret(init, count):
 def sum_secrets(inits):
     return sum([calc_secret(n, 2000) for n in inits])
 
-# This is a ridiculously OTT bruteforce but eh, it worked (eventually)
 
-
-def create_intervals():
-    intervals = set()
-    for p in range(0, 10):
-        for q in range(0, 10):
-            for r in range(0, 10):
-                for s in range(0, 10):
-                    for t in range(0, 10):
-                        interval = (p - q, q - r, r - s, s - t)
-                        intervals.add(interval)
-
-    return intervals
-
-
-def find_first_value(interval, init, count):
-    # returns the buy the first time the interval appears
-    secret = init
-    changes = []
-    for i in range(count):
-        # calculate the new secret
+def calc_intervals(secret, bananas):
+    secrets = [secret]
+    for i in range(2001):
         m = secret << 6
-        n_secret = (m ^ secret) % 16777216
-        d = n_secret >> 5
-        n_secret = (d ^ n_secret) % 16777216
-        m2 = n_secret << 11
-        n_secret = (m2 ^ n_secret) % 16777216
-        n_price = n_secret % 10
+        secret = (m ^ secret) % 16777216
+        d = secret >> 5
+        secret = (d ^ secret) % 16777216
+        m2 = secret << 11
+        secret = (m2 ^ secret) % 16777216
+        secrets.append(secret)
 
-        if len(changes) == 4:
-            changes.pop(0)
-        changes.append(n_price - (secret % 10))
+    # for each interval of 4 changes as they appear in the sequeunce
+    # of secrets, find the final price and add it to the total price
+    # in bananas if it hasn't already been added
+    visited = set()
+    for i in range(1, 1998):
+        prices = [n % 10 for n in secrets[i - 1: i + 4]]
+        changes = tuple(n - prices[j] for j, n in enumerate(prices[1:]))
+        if changes in visited:
+            continue
+        price = prices[-1]
+        bananas[changes] += price
+        visited.add(changes)
 
-        if changes == interval:
-            return n_price
-
-        secret = n_secret
-
-    return 0
+    return
 
 
-def part_2(input, count):
-    intervals = create_intervals()
-    max_bananas = 0
-    for i, interval in enumerate(intervals):
-        if i % 1000 == 1:
-            print(i)
-        total = sum([find_first_value(list(interval), s, count)
-                    for s in input])
-        if total > max_bananas:
-            max_bananas = total
-            print(max_bananas, interval, "< new best")
-
-    return max_bananas
+def part_2(secrets):
+    bananas = defaultdict(lambda: 0)
+    for secret in secrets:
+        calc_intervals(secret, bananas)
+    return max(b for b in bananas.values())
 
 
 if __name__ == "__main__":
     with open("inputs/day_22.txt") as f:
         input = [int(l.replace("\n", "")) for l in f.readlines()]
         total_secrets = sum_secrets(input)
-        max_bananas = part_2(input, 2000)
+        print(total_secrets, "< part 1")
+        max_bananas = part_2(input)
         print(max_bananas, "< part 2")
