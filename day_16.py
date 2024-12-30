@@ -44,74 +44,88 @@ def find_lowest_score(maze):
 
 
 def find_best_seat(maze):
-    # The graph is actually more complicated than it looks
-    # it is 4x bigger - each node can have a different direction
-    # so to find all possible optimal paths we perform a BFS
-    # and keep track of the shortes track to each node
-    # and which nodes get it there via the shortest way
-
     width = len(maze[0])
-    flattened = "".join(["".join(l) for l in maze])
-    start = complex(*divmod(flattened.find("S"), width)[::-1])
-    end = complex(*divmod(flattened.find("E"), width)[::-1])
+    height = len(maze)
+    maze_d = {}
+    for y, l in enumerate(maze):
+        for x, c in enumerate(l):
+            maze_d[x + 1j * y] = c
 
-    distances = {(start, 1): 0}
+    start = [k for k, v in maze_d.items() if v == "S"][0]
+    end = [k for k, v in maze_d.items() if v == "E"][0]
+
+    distances = {}
+    for p in maze_d:
+        distances[(p, 1)] = math.inf
+        distances[(p, -1)] = math.inf
+        distances[(p, 1j)] = math.inf
+        distances[(p, -1j)] = math.inf
+    distances[(start, 1)] = 0
+
     parents = {}
 
-    # if new score == distance, add it to the list of parents
-    # if its less, update the score and replace the list
+    # use a djikstras but keep going until the we hit a distance greater than the distance to final node
 
-    queue = [(start, 1)]
+    # have to represent directions as an integer for heapq
+    i_dirs = {1: 1, -1: -1, 2: 1j, 3: -1j}
+    rev_i_dirs = {1: 1, -1: -1, 1j: 2, -1j: 3}
 
-    while len(queue) > 0:
-        pos, dir = queue.pop()
+    heap = [(0, int(start.real + start.imag * height), 1)]
 
+    while True:
+        score, index, i_dir = heapq.heappop(heap)
+
+        if score > min(distances[(end, 1)], distances[(end, -1)], distances[(end, 1j)], distances[(end, -1j)]):
+            # we've gone further than the fastest route, so are done searching
+            break
+
+        dir = i_dirs[i_dir]
+        pos = complex(*divmod(index, width)[::-1])
+
+        # go to surrounding nodes
         for dir_mult in [1, 1j, -1j]:
             new_dir = dir * dir_mult
-            new_score = distances[(pos, dir)] + (1 if dir_mult == 1 else 1000)
+            new_score = score + (1 if dir_mult == 1 else 1000)
             new_pos = -1
             if dir_mult == 1:
-                # straight_ahead
+                # go straight
                 new_pos = pos + new_dir
             else:
-                # turning
+                # turn
                 new_pos = pos
 
-            node = (new_pos, new_dir)
-
-            if maze[int(node[0].imag)][int(node[0].real)] != "#":
-                if node not in distances or new_score < distances[node]:
-                    # unvisited, or a shorter route found
-                    distances[node] = new_score
-                    parents[node] = {(pos, dir)}
-                    queue.append(node)
-                elif new_score == distances[node]:
-                    # same distance, so add to parents
-                    parents[node].add((pos, dir))
-
-    # to count the number of seats, turn every cell which is traveled to an O
-    # and count those
-    copy_maze = deepcopy(maze)
-
-    def change_maze(node):
-        x, y = int(node[0].real), int(node[0].imag)
-        if node not in parents:
-            # finished
-            copy_maze[y][x] = "O"
-            return
-        for parent in parents[node]:
-            p_x, p_y = int(parent[0].real), int(parent[0].imag)
-            copy_maze[p_y][p_x] = "O"
-            change_maze(parent)
+            if maze_d[new_pos] != "#":
+                if new_score < distances[(new_pos, new_dir)]:
+                    # shorter route found
+                    # update distance
+                    distances[(new_pos, new_dir)] = new_score
+                    # replace parents
+                    parents[(new_pos, new_dir)] = {(pos, dir)}
+                    i_new_pos = int(new_pos.real + new_pos.imag * width)
+                    i_new_dir = rev_i_dirs[new_dir]
+                    # add to queue
+                    heapq.heappush(heap, (new_score, i_new_pos, i_new_dir))
+                elif new_score == distances[(new_pos, new_dir)]:
+                    # same distance, add to parents
+                    parents[(new_pos, new_dir)].add((pos, dir))
 
     ends = [n for n in distances if n[0] == end]
     optimal_distance = min([distances[n] for n in ends])
     optimals = [n for n in ends if distances[n] == optimal_distance]
 
+    def change_maze(node):
+        if node not in parents:
+            # finished
+            maze_d[node[0]] = "O"
+            return
+        for parent in parents[node]:
+            maze_d[parent[0]] = "O"
+            change_maze(parent)
+
     for n in optimals:
         change_maze(n)
 
-    return sum([l.count("O") for l in copy_maze]) + 1
+    return len({d for d, v in maze_d.items() if v == "O" or v == "E"})
 
 
 if __name__ == "__main__":
@@ -121,4 +135,4 @@ if __name__ == "__main__":
         lowest_score = find_lowest_score(maze)
         print(lowest_score, "< part 1")
         best_seats = find_best_seat(maze)
-        print(best_seats, "< part 2")
+        print(best_seats, "< part 2",)
